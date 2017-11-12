@@ -14,6 +14,7 @@
 #include <fstream>
 
 #include <EssexEngineCore/BaseDriver.h>
+#include <EssexEngineCore/LogDaemon.h>
 #include <EssexEngineCore/Context.h>
 #include <EssexEngineFileSystemDaemon/IFileSystemDriver.h>
 
@@ -30,8 +31,8 @@ namespace FileSystem{
         
         //IDriver
         void Init() {
-            if(GetContext()->HasDriver<Core::Logging::ILogDriver>()) {
-                GetContext()->GetDriver<Core::Logging::ILogDriver>()->LogLine(
+            if(GetContext()->HasDaemon<Core::Logging::LogDaemon>()) {
+                GetContext()->GetDaemon<Core::Logging::LogDaemon>()->LogLine(
                     "Loading Driver [%s] [%s]",
                     GetDriverName().c_str(),
                     GetDriverVersion().c_str()
@@ -42,7 +43,7 @@ namespace FileSystem{
         //IFileSystemDriver
         void LoadZipArchive(std::string filepath);
         void CloseZipArchive();
-        SharedPointer<Daemons::FileSystem::IFileBuffer> ReadFile(std::string filename);
+        WeakPointer<Daemons::FileSystem::IFileBuffer> ReadFile(std::string filename);
         void SaveFile(std::string filename, void* data, uint64_t size);
         
         //BaseDriver

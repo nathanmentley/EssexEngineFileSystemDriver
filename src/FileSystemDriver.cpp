@@ -27,7 +27,7 @@ void EssexEngine::Drivers::FileSystem::FileSystemDriver::LoadZipArchive(std::str
 
 void EssexEngine::Drivers::FileSystem::FileSystemDriver::CloseZipArchive() {}
 
-EssexEngine::SharedPointer<EssexEngine::Daemons::FileSystem::IFileBuffer> EssexEngine::Drivers::FileSystem::FileSystemDriver::ReadFile(std::string filename) {
+EssexEngine::WeakPointer<EssexEngine::Daemons::FileSystem::IFileBuffer> EssexEngine::Drivers::FileSystem::FileSystemDriver::ReadFile(std::string filename) {
     std::string newfilename = cwd + "/" + filename;
     FILE *fp = fopen(newfilename.c_str(), "rb");
     
@@ -43,7 +43,7 @@ EssexEngine::SharedPointer<EssexEngine::Daemons::FileSystem::IFileBuffer> EssexE
     fread(buffer, lSize, 1, fp);
     fclose(fp);
     
-    return SharedPointer<Daemons::FileSystem::IFileBuffer>(new FileSystemFileBuffer(filename, buffer, int(lSize)));
+    return WeakPointer<FileSystemFileBuffer>(new FileSystemFileBuffer(filename, buffer, int(lSize))).Cast<Daemons::FileSystem::IFileBuffer>();
 }
 
 void EssexEngine::Drivers::FileSystem::FileSystemDriver::SaveFile(std::string filename, void* data, uint64_t size) {
