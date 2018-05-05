@@ -11,10 +11,16 @@
 
 #include <EssexEngineFileSystemDriver/FileSystemDriver.h>
 
-extern "C" {
-    void driver_init(EssexEngine::Context* context) {
-        EssexEngine::Drivers::FileSystem::FileSystemDriver* fileSystemDriver = new EssexEngine::Drivers::FileSystem::FileSystemDriver(context);
+using EssexEngine::Context;
+using EssexEngine::WeakPointer;
 
-        context->RegisterDriver<EssexEngine::Daemons::FileSystem::IFileSystemDriver>(fileSystemDriver);
+using EssexEngine::Drivers::FileSystem::FileSystemDriver;
+using EssexEngine::Daemons::FileSystem::IFileSystemDriver;
+
+extern "C" {
+    void driver_init(WeakPointer<Context> context) {
+        context->RegisterDriver<IFileSystemDriver>(
+            WeakPointer<IFileSystemDriver>(new FileSystemDriver(context)) 
+        );
     }
 }
